@@ -1,11 +1,21 @@
+version: "3.8"
+
 services:
-  nginx:
+  app:
+    image: php:8.2-fpm
+    container_name: php-fpm
+    volumes:
+      - ./:/var/www/html
+    restart: always
+
+  web:
     image: nginx:latest
-    command: >
-      bash -c "echo '<h1>Coolify ✅ شغال تمام</h1>' > /usr/share/nginx/html/index.html && nginx -g 'daemon off;'"
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
-      start_period: 5s
+    container_name: nginx
+    depends_on:
+      - app
+    ports:
+      - "8085:80"
+    volumes:
+      - ./:/var/www/html
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    restart: always
