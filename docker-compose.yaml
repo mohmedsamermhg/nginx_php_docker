@@ -5,10 +5,10 @@ services:
     image: nginx:latest
     container_name: nginx_server
     ports:
-      - "8085:80"          
+      - "8085:80"
     volumes:
-      - .:/var/www/html  
-      - ./nginx.conf:/etc/nginx/conf.d/app.conf
+      - ./code:/var/www/html
+      - ./nginx:/etc/nginx/conf.d 
     depends_on:
       - php
     networks:
@@ -18,7 +18,7 @@ services:
     image: php:8.2-fpm
     container_name: php_fpm
     volumes:
-      - .:/var/www/html   
+      - ./code:/var/www/html
     networks:
       - app-network
 
