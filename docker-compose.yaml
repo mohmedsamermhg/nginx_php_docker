@@ -4,15 +4,19 @@ services:
   nginx:
     image: nginx:latest
     container_name: nginx_server
-    ports:
-      - "8085:80"
     volumes:
       - ./code:/var/www/html
-      - ./nginx:/etc/nginx/conf.d 
+      - ./nginx:/etc/nginx/conf.d
     depends_on:
       - php
     networks:
       - app-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
 
   php:
     image: php:8.2-fpm
